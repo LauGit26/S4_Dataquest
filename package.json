@@ -1,0 +1,13 @@
+{
+  "name": "dataquest-fuentes-de-informacion",
+  "version": "1.0.0",
+  "description": "Juego educativo (HTML/CSS/JS puro) sobre uso responsable de IA, fuentes de información confiables y análisis de datos en Economía Internacional.",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "deploy": "npx gh-pages -d ."
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
+}
