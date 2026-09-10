@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DataQuest — La ruta del analista</title>
+<meta name="description" content="Expedición interactiva sobre análisis de datos y fuentes de información en Economía Internacional." />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-name">DataQuest</span>
+    </div>
+    <div class="topbar-actions">
+      <button id="btn-mute" class="icon-btn" title="Silenciar sonido" aria-label="Silenciar sonido">🔊</button>
+    </div>
+  </header>
+
+  <main id="app">
+
+    <!-- ========== MENÚ PRINCIPAL ========== -->
+    <section id="screen-menu" class="screen active">
+      <div class="card menu-card">
+        <h1>La ruta del analista económico</h1>
+        <p class="subtitle">Una expedición por el uso responsable de la IA, las fuentes de información confiables y el análisis correcto de cifras. Compite con tu grupo, gana puntos y estrellas, y aprende en el camino.</p>
+
+        <label class="field">
+          <span>Tu nombre</span>
+          <input type="text" id="input-name" maxlength="24" placeholder="Ej. María Fernández" autocomplete="off" />
+        </label>
+
+        <fieldset class="field mode-select">
+          <legend>Modo de juego</legend>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="competencia" checked />
+            <span>
+              <strong>🏆 Competencia</strong>
+              <small>Con tiempo, puntos y racha. Tu resultado entra a la tabla de posiciones del grupo.</small>
+            </span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="mode" value="estudio" />
+            <span>
+              <strong>📖 Estudio</strong>
+              <small>Sin tiempo. Ideal para repasar con calma antes de competir.</small>
+            </span>
+          </label>
+        </fieldset>
+
+        <button id="btn-start" class="btn btn-primary btn-lg">Comenzar la expedición</button>
+
+        <div class="menu-secondary">
+          <button id="btn-view-leaderboard" class="btn btn-ghost">Ver tabla de posiciones</button>
+          <button id="btn-view-rules" class="btn btn-ghost">¿Cómo se puntúa?</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== REGLAS ========== -->
+    <section id="screen-rules" class="screen">
+      <div class="card">
+        <h2>¿Cómo funciona la expedición?</h2>
+        <ul class="rules-list">
+          <li><strong>3 estaciones (capítulos):</strong> IA responsable, fuentes confiables y análisis de datos. Cada una se desbloquea al terminar la anterior.</li>
+          <li><strong>Puntos base según dificultad:</strong> Recordar 100 · Comprender 150 · Aplicar 200 · Analizar 250.</li>
+          <li><strong>Bono por velocidad:</strong> responder rápido en modo Competencia da hasta +50% de puntos extra.</li>
+          <li><strong>Bono por racha:</strong> 3 aciertos seguidos = ×1.2, 6 o más = ×1.5.</li>
+          <li><strong>Estrellas por capítulo:</strong> 100% de aciertos = 3 ⭐ · 70%+ = 2 ⭐ · 40%+ = 1 ⭐. No hay "vidas": siempre completas la expedición.</li>
+          <li><strong>Aprendizaje:</strong> después de cada pregunta ves la respuesta correcta y una breve explicación.</li>
+          <li><strong>Competencia asíncrona:</strong> cada quien juega cuando puede; todos los resultados llegan a la misma tabla de posiciones.</li>
+        </ul>
+        <button class="btn btn-primary" id="btn-rules-back">Entendido</button>
+      </div>
+    </section>
+
+    <!-- ========== MAPA DE EXPEDICIÓN ========== -->
+    <section id="screen-map" class="screen">
+      <div class="map-hud">
+        <div class="hud-item" id="map-hud-player">👤 —</div>
+        <div class="hud-item" id="map-hud-score">⭐ 0 pts</div>
+        <div class="hud-item" id="map-hud-mode">🏆 Competencia</div>
+      </div>
+      <h2 class="map-title">Mapa de la expedición</h2>
+      <p class="subtitle">Avanza estación por estación. Toca el círculo resaltado para continuar.</p>
+      <div id="chapters-wrap" class="chapters-wrap"></div>
+    </section>
+
+    <!-- ========== PREGUNTA ========== -->
+    <section id="screen-question" class="screen">
+      <div class="game-hud">
+        <div class="hud-item" id="hud-chapter">Estación 1</div>
+        <div class="hud-item" id="hud-progress">Pregunta 1/5</div>
+        <div class="hud-item" id="hud-score">⭐ 0 pts</div>
+        <div class="hud-item" id="hud-streak">🔥 Racha: 0</div>
+      </div>
+
+      <div class="timer-track"><div id="timer-bar" class="timer-bar"></div></div>
+
+      <div class="card question-card">
+        <span id="question-level" class="badge">Comprender</span>
+        <h2 id="question-text">Texto de la pregunta...</h2>
+        <div id="options-grid" class="options-grid"></div>
+
+        <div id="feedback-box" class="feedback-box" hidden>
+          <p id="feedback-title"></p>
+          <p id="feedback-explanation"></p>
+          <button id="btn-next" class="btn btn-primary">Siguiente →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CAPÍTULO COMPLETADO ========== -->
+    <section id="screen-chapter-complete" class="screen">
+      <div class="card chapter-complete-card">
+        <span class="chapter-complete-icon" id="chapter-complete-icon">🧭</span>
+        <h2 id="chapter-complete-title">Estación completada</h2>
+        <div class="stars-display" id="chapter-complete-stars">⭐⭐⭐</div>
+        <p id="chapter-complete-stats" class="subtitle"></p>
+        <button id="btn-chapter-continue" class="btn btn-primary btn-lg">Volver al mapa</button>
+      </div>
+    </section>
+
+    <!-- ========== RESULTADOS FINALES ========== -->
+    <section id="screen-result" class="screen">
+      <div class="card result-card">
+        <h2 id="result-title">¡Expedición completada!</h2>
+        <div class="result-score" id="result-score">0 pts</div>
+        <div class="stars-display" id="result-stars">⭐⭐⭐⭐⭐⭐⭐⭐⭐</div>
+        <div class="result-stats">
+          <div><span id="result-correct">0</span><small>Correctas</small></div>
+          <div><span id="result-accuracy">0%</span><small>Precisión</small></div>
+          <div><span id="result-best-streak">0</span><small>Mejor racha</small></div>
+        </div>
+        <p id="result-message" class="result-message"></p>
+        <div class="result-actions">
+          <button id="btn-play-again" class="btn btn-primary">Jugar de nuevo</button>
+          <button id="btn-go-leaderboard" class="btn btn-secondary">Ver tabla de posiciones</button>
+          <button id="btn-download-result" class="btn btn-ghost">⬇️ Descargar mi resultado</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TABLA DE POSICIONES ========== -->
+    <section id="screen-leaderboard" class="screen">
+      <div class="card leaderboard-card">
+        <div class="leaderboard-header">
+          <h2>🏆 Tabla de posiciones</h2>
+          <span id="leaderboard-status" class="status-badge">Conectando…</span>
+        </div>
+        <p class="subtitle" id="leaderboard-subtitle">Competencia asíncrona: cada estudiante juega cuando puede y su resultado aparece aquí solo.</p>
+        <div id="leaderboard-table-wrap" class="leaderboard-table-scroll">
+          <table class="leaderboard-table">
+            <thead>
+              <tr><th>#</th><th>Nombre</th><th>Puntos</th><th>Precisión</th><th>⭐</th><th>Fecha</th></tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+          <p id="leaderboard-empty" class="empty-state" hidden>Todavía no hay resultados. ¡Sé la primera persona en jugar!</p>
+        </div>
+
+        <div class="leaderboard-tools">
+          <label class="btn btn-ghost file-btn">
+            ⬆️ Importar resultado(s)
+            <input type="file" id="input-import" accept="application/json" multiple hidden />
+          </label>
+          <button id="btn-export-leaderboard" class="btn btn-ghost">⬇️ Exportar tabla completa</button>
+          <button id="btn-reset-leaderboard" class="btn btn-danger-ghost">🗑️ Reiniciar tabla (docente)</button>
+        </div>
+
+        <button id="btn-leaderboard-back" class="btn btn-primary">Volver al menú</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== MODAL: reinicio solo para la persona docente ========== -->
+  <div id="modal-teacher-login" class="modal-overlay" hidden>
+    <div class="modal-box card">
+      <h2>Reiniciar tabla global</h2>
+      <p class="subtitle">Solo la cuenta docente autorizada puede reiniciar la tabla. Ingresa sus credenciales de Firebase para continuar.</p>
+      <label class="field">
+        <span>Correo docente</span>
+        <input type="email" id="teacher-email" autocomplete="username" placeholder="docente@ucr.ac.cr" />
+      </label>
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" id="teacher-password" autocomplete="current-password" />
+      </label>
+      <p id="teacher-login-error" class="error-text" hidden></p>
+      <div class="modal-actions">
+        <button id="btn-teacher-cancel" class="btn btn-ghost">Cancelar</button>
+        <button id="btn-teacher-confirm" class="btn btn-danger-ghost">Confirmar reinicio</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Expedición gamificada — Economía Internacional · Editable en VS Code · <span id="question-count-footer"></span> preguntas en <span id="chapter-count-footer"></span> estaciones</p>
+  </footer>
+
+  <script src="js/questions.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/leaderboard.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
