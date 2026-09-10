@@ -50,6 +50,12 @@
     window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
   }
 
+  function returnToMenu() {
+    game.stopTimer();
+    game.reset();
+    showScreen("menu");
+  }
+
   const totalQuestionCount = CHAPTERS.reduce((sum, ch) => sum + ch.questions.length, 0);
   document.getElementById("question-count-footer").textContent = totalQuestionCount;
   document.getElementById("chapter-count-footer").textContent = CHAPTERS.length;
@@ -66,6 +72,7 @@
 
   document.getElementById("btn-view-rules").addEventListener("click", () => showScreen("rules"));
   document.getElementById("btn-rules-back").addEventListener("click", () => showScreen("menu"));
+  document.getElementById("btn-home").addEventListener("click", returnToMenu);
   document.getElementById("btn-view-leaderboard").addEventListener("click", () => {
     renderLeaderboardTable(latestLeaderboardEntries);
     showScreen("leaderboard");
