@@ -24,12 +24,13 @@
  */
 
 const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyA9Ut8bHBXIplG5qEJVSpfmhErPaFOtcKs",
+  authDomain: "xp0201-dataquest-ia-y-fuentes.firebaseapp.com",
+  projectId: "xp0201-dataquest-ia-y-fuentes",
+  storageBucket: "xp0201-dataquest-ia-y-fuentes.firebasestorage.app",
+  messagingSenderId: "981456583190",
+  appId: "1:981456583190:web:ab7482f59cbfcd98b41337"
+
 };
 
 // Correo de la persona docente autorizada a reiniciar la tabla global.
